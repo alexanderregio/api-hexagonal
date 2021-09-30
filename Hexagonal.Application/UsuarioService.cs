@@ -1,6 +1,7 @@
 ﻿using Hexagonal.Domain.Adapters;
 using Hexagonal.Domain.Models;
 using Hexagonal.Domain.Services;
+using Hexagonal.Domain.Validations;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Threading.Tasks;
@@ -23,6 +24,8 @@ namespace Hexagonal.Application
 
         public async Task CadastrarUsuarioAsync(Usuario usuario)
         {
+            ModelValidator.Validate(usuario);
+
             logger.LogInformation("Begin...");
 
             await dbAdapter.CadastrarUsuarioAsync(usuario);
