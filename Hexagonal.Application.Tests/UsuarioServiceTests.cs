@@ -53,10 +53,10 @@ namespace Hexagonal.Application.Tests
                 .Setup(m => m.CadastrarUsuarioAsync(It.IsAny<Usuario>()))
                 .ThrowsAsync(new ArgumentException("Usuário não pode ser nulo"));
 
-            var expectedException = await Assert.ThrowsAsync<ArgumentException>
+            var expectedException = await Assert.ThrowsAsync<ArgumentNullException>
                 (async () => await usuarioService.CadastrarUsuarioAsync(null));
 
-            Assert.Contains("Usuário não pode ser nulo", expectedException.Message);
+            Assert.Contains("Value cannot be null. (Parameter 'instance')", expectedException.Message);
         }
 
         [Theory]
@@ -78,12 +78,12 @@ namespace Hexagonal.Application.Tests
                 .Setup(m => m.CadastrarUsuarioAsync(It.IsAny<Usuario>()))
                 .ThrowsAsync(new UsuarioCoreException(UsuarioCoreError.LoginNuloOuEspacoVazio(It.IsAny<Usuario>())));
 
-            var expectedException = await Assert.ThrowsAsync<UsuarioCoreException>
+            var expectedException = await Assert.ThrowsAsync<CoreException>
                 (async () => await usuarioService.CadastrarUsuarioAsync(usuario));
 
             var expectedMessageException = expectedException.errors.First().message;
 
-            Assert.Contains("O login do usuário não pode ser nulo ou vazio.", expectedMessageException);
+            Assert.Contains("Login requerido!", expectedMessageException);
         }
 
         [Theory]
@@ -105,12 +105,12 @@ namespace Hexagonal.Application.Tests
                 .Setup(m => m.CadastrarUsuarioAsync(It.IsAny<Usuario>()))
                 .ThrowsAsync(new UsuarioCoreException(UsuarioCoreError.SenhaNulaOuEspacoVazio(It.IsAny<Usuario>())));
 
-            var expectedException = await Assert.ThrowsAsync<UsuarioCoreException>
+            var expectedException = await Assert.ThrowsAsync<CoreException>
                 (async () => await usuarioService.CadastrarUsuarioAsync(usuario));
 
             var expectedMessageException = expectedException.errors.First().message;
 
-            Assert.Contains("O senha do usuário não pode ser nula ou vazia.", expectedMessageException);
+            Assert.Contains("Senha requerida!", expectedMessageException);
         }
 
         [Fact]
